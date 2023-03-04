@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    :root{
+      --scroll_width: -1120px;
+    }
+    body {
+      font-family: "Open Sans", sans-serif;
+      font-size: 16px;
+      color: #FFFFFF;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }  
+    
+    .toggleNav {
+      @apply fixed w-full bg-current left-0 py-4 justify-center top-0 h-screen bg-[rgba(0,0,0,0.9)] overflow-scroll animate-translate_up_to_down;
+    }
+  }
