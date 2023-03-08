@@ -1,8 +1,39 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import { Line } from 'react-chartjs-2';
 
 const TotalChgChgOI = (props) => {
+  const [PCR, setPCR] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const pcrData = props.tabelData.map((item) => {
+        let itemPCR = item.TotalPutChgOI && item.TotalCallChgOI ? item.TotalPutChgOI / item.TotalCallChgOI : 0;
+        itemPCR = isNaN(itemPCR) ? 0 : itemPCR;
+        return itemPCR;
+      });
+      setPCR(pcrData);
+    }
+    fetchData();
+  }, [])
+  
+  const chartData = {
+    labels: props.tabelData.map(item => item.date),
+    datasets: [
+      {
+        label: 'PCR',
+        data: PCR,
+        fill: false,
+        borderColor: 'rgba(75,192,192,1)',
+        tension: 0.1
+      }
+    ]
+  };
+  
   return (
     <div>
+      <div className="my-6">
+      <Line data={chartData} />
+      </div>
       <table className="table-auto w-full text-center text-[0.5rem] xxs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
         <thead className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
           <tr className="font-bold text-white">

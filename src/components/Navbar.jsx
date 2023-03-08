@@ -96,12 +96,11 @@ const Navbar = () => {
                     </div>
                   )}
                   <Link
-  to="/about"
-  className="text-gray-300 bg-gradient-to-r rounded-lg from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-[0.60rem] text-sm font-medium focus:outline-none"
->
-  About Us
-</Link>
-
+                    to="/about"
+                    className="text-gray-300 bg-gradient-to-r rounded-lg from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-[0.60rem] text-sm font-medium focus:outline-none"
+                  >
+                    About Us
+                  </Link>
                 </div>
               </div>
             </div>
