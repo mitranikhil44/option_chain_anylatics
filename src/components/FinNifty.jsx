@@ -224,44 +224,47 @@ const FinNifty = (props) => {
                   </tr>
                 );
               })}
-            {data.data && (
-              <tr
-                key={0}
-                className="text-center hover:bg-gray-700 bg-gradient-to-r from-red-600 to-green-600 text-white"
-              >
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalCallLTP.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalCallChgLTP.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalCallVol.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalCallOI.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalCallChgOI.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">Total</td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalPutChgOI.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalPutOI.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalPutVol.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalPutChgLTP.toFixed(2)}
-                </td>
-                <td className="py-1 px-3 border">
-                  {data.data[0].TotalPutLTP.toFixed(2)}
-                </td>
-              </tr>
-            )}
+            {data &&
+              data.slice(-1).map((e, i) => {
+                return (
+                  <tr
+                    key={i}
+                    className="text-center hover:bg-gray-700 bg-gradient-to-r from-red-600 to-green-600 text-white"
+                  >
+                    <td className="py-1 px-3 border">
+                      {e.TotalCallLTP.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalCallChgLTP.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalCallVol.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalCallOI.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalCallChgOI.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">Total</td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalPutChgOI.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalPutOI.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalPutVol.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalPutChgLTP.toFixed(2)}
+                    </td>
+                    <td className="py-1 px-3 border">
+                      {e.TotalPutLTP.toFixed(2)}
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
