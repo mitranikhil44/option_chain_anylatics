@@ -12,28 +12,35 @@ const FinNifty = (props) => {
   const [showChangeTableOI, setShowChangeTableOI] = useState(false);
   const [showCurrentTableVol, setShowCurrentTableVol] = useState(false);
 
+  const headers = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQxMjE0MTgzODRlNjQyYjk0NjQ5YzdkIn0sImlhdCI6MTY3ODkwNjQxNn0.xxmdEHkLp-kOJZXf2YwvnlBvWTgfZOqzfN_HXwkJXUM`,
+    }};
+
   // Function to get data from API
   useEffect(() => {
     // Get fin nifty postion data
-    fetch(`${props.host}fin_nifty`)
+    fetch(`${props.host}fin_nifty`, headers)
       .then((res) => res.json())
       .then((data) => {
-        setData(data);
+        setData(data.data);
       });
 
     // Get fin nifty option data
-    fetch(`${props.host}fin_nifty_option_chain`)
+    fetch(`${props.host}fin_nifty_option_chain`, headers)
       .then((res) => res.json())
       .then((data) => {
         const dataCopy = [...data.data];
-        const middleData = dataCopy.splice(30, dataCopy.length - 60);
+        const middleData = dataCopy.splice(10, dataCopy.length - 30);
         setFinNiftyOptionData(middleData);
       });
 
     // Get fin nifty live market price
     const fetchData = async () => {
       try {
-        const res = await fetch(`${props.host}fin_nifty_market_price`);
+        const res = await fetch(`${props.host}fin_nifty_market_price`, headers);
         if (!res.ok) {
           throw new Error(`Failed to fetch nifty market price: ${res.status}`);
         }
@@ -49,6 +56,8 @@ const FinNifty = (props) => {
 
     // Stop the interval when the component unmounts to prevent memory leaks
     return () => clearInterval(fetchInterval);
+
+    // eslint-disable-next-line
   }, [props.host]);
 
   // Function to show current open interest table
@@ -271,15 +280,15 @@ const FinNifty = (props) => {
 
       {/* Nifty Current Open Interest Data */}
       <ClickableButton text="Current Open Interest" onClick={handleCurrentOI} />
-      {showCurrentTableOI && <TotalOI tabelData={data.data} />}
+      {showCurrentTableOI && <TotalOI tabelData={data} />}
 
       {/* Nifty Change Open Interest Data */}
       <ClickableButton text="Change Open Interest" onClick={handleChangeOI} />
-      {showChangeTableOI && <TotalChgOI tabelData={data.data} />}
+      {showChangeTableOI && <TotalChgOI tabelData={data} />}
 
       {/* Nifty Current Volume Data */}
       <ClickableButton text="Current Volume" onClick={handleCurrentVol} />
-      {showCurrentTableVol && <TotalVol tabelData={data.data} />}
+      {showCurrentTableVol && <TotalVol tabelData={data} />}
     </>
   );
 };

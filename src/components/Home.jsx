@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart, LinearScale, CategoryScale } from "chart.js";
+import { useNavigate } from "react-router-dom";
 import "chart.js/auto";
-
 Chart.register(LinearScale);
 Chart.register(CategoryScale);
 
@@ -10,60 +10,87 @@ const Home = (props) => {
   const [niftyLiveMarketPrice, setNiftyLiveMarketPrice] = useState([]);
   const [bankNiftyLiveMarketPrice, setBankNiftyLiveMarketPrice] = useState([]);
   const [finNiftyLiveMarketPrice, setFinNiftyLiveMarketPrice] = useState([]);
+  const navigate = useNavigate();
 
-  // Function to get data from API
+  
   useEffect(() => {
-    const fetchMarketData = async () => {
-      try {
-        const [niftyRes, bankNiftyRes, finNiftyRes] = await Promise.all([
-          fetch(`${props.host}nifty_market_price`),
-          fetch(`${props.host}bank_nifty_market_price`),
-          fetch(`${props.host}fin_nifty_market_price`),
-        ]);
-        const [niftyData, bankNiftyData, finNiftyData] = await Promise.all([
-          niftyRes.json(),
-          bankNiftyRes.json(),
-          finNiftyRes.json(),
-        ]);
-        setNiftyLiveMarketPrice(niftyData.data);
-        setBankNiftyLiveMarketPrice(bankNiftyData.data);
-        setFinNiftyLiveMarketPrice(finNiftyData.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchMarketData();
-    // Schedule the market data fetch every 1 minutes`
-    let intervalId = setInterval(fetchMarketData, 1 * 60 * 1000);
 
-    // Clear the interval when the component is unmounted
-    return () => clearInterval(intervalId);
-  }, [props.host]);
+    // If user is not authenticated, redirect to login page
+  if (localStorage.getItem("x-auth-token")) {
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
+  } else {
+    navigate("/login" || "/signUp");
+  }
 
-// Function to create chart data for a given market
-function createChartData(marketData, marketName) {
-  const chartData = {
-    labels: marketData.map((item) => item.timestamp),
-    datasets: [
-      {
-        label: `${marketName} Live Change Volume`,
-        data: marketData.map((item) => item.volume),
-        fill: false,
-        backgroundColor: marketData.map((item) =>
-          item.volume >= 0 ? "green" : "red"
-        ),
-        borderColor: "rgba(255, 99, 132, 0.2)",
-      },
-    ],
+  // Get the market data from the server
+  const fetchMarketData = async () => {
+    try {
+      const headers = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQxMjE0MTgzODRlNjQyYjk0NjQ5YzdkIn0sImlhdCI6MTY3ODkwNjQxNn0.xxmdEHkLp-kOJZXf2YwvnlBvWTgfZOqzfN_HXwkJXUM`,
+          }};
+      
+      const [niftyRes, bankNiftyRes, finNiftyRes] = await Promise.all([
+        fetch(`${props.host}nifty_market_price`, headers),
+        fetch(`${props.host}bank_nifty_market_price`, headers),
+        fetch(`${props.host}fin_nifty_market_price`, headers),
+      ]);
+      const [niftyData, bankNiftyData, finNiftyData] = await Promise.all([
+        niftyRes.json(),
+        bankNiftyRes.json(),
+        finNiftyRes.json(),
+      ]);
+      setNiftyLiveMarketPrice(niftyData.data);
+      setBankNiftyLiveMarketPrice(bankNiftyData.data);
+      setFinNiftyLiveMarketPrice(finNiftyData.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  return chartData;
-}
+  fetchMarketData();
+  // Schedule the market data fetch every 1 minutes`
+  let intervalId = setInterval(fetchMarketData, 1 * 60 * 1000);
 
-// Create chart data for each market
-const niftyChartData = createChartData(niftyLiveMarketPrice, "Nifty");
-const bankNiftyChartData = createChartData(bankNiftyLiveMarketPrice, "Bank Nifty");
-const finNiftyChartData = createChartData(finNiftyLiveMarketPrice, "Fin Nifty");
+  // Clear the interval when the component is unmounted
+  return () => clearInterval(intervalId);
 
+  // eslint-disable-next-line
+}, [props.host])
+
+  
+  // Function to create chart data for a given market
+  function createChartData(marketData, marketName) {
+    const chartData = {
+      labels: marketData.map((item) => item.timestamp),
+      datasets: [
+        {
+          label: `${marketName} Live Change Volume`,
+          data: marketData.map((item) => item.volume),
+          fill: false,
+          backgroundColor: marketData.map((item) =>
+            item.volume >= 0 ? "green" : "red"
+          ),
+          borderColor: "rgba(255, 99, 132, 0.2)",
+        },
+      ],
+    };
+    return chartData;
+  }
+
+  // Create chart data for each market
+  const niftyChartData = createChartData(niftyLiveMarketPrice, "Nifty");
+  const bankNiftyChartData = createChartData(
+    bankNiftyLiveMarketPrice,
+    "Bank Nifty"
+  );
+  const finNiftyChartData = createChartData(
+    finNiftyLiveMarketPrice,
+    "Fin Nifty"
+  );
 
   return (
     <>

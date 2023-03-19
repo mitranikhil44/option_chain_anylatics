@@ -7,13 +7,14 @@ const TotalOI = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const pcrData = props.tabelData.map((item) => {
-        let itemPCR = item.TotalPutChgOI && item.TotalCallChgOI ? item.TotalPutOI / item.TotalCallOI : 0;
+        let itemPCR = item.TotalPutChgOI && item.TotalCallChgOI ?  item.TotalCallOI / item.TotalPutOI : 0;
         itemPCR = isNaN(itemPCR) ? 0 : itemPCR;
         return itemPCR;
       });
       setPCR(pcrData);
     }
     fetchData();
+    // eslint-disable-next-line
   }, [])
   
   const chartData = {
@@ -55,16 +56,16 @@ const TotalOI = (props) => {
                   {item.TotalCallOI - item.TotalPutOI}
                 </td>
                 <td className="px-2 py-1 border">
-                  {(item.TotalPutOI / item.TotalCallOI).toFixed(2)}
+                  {(item.TotalCallOI / item.TotalPutOI).toFixed(2)}
                 </td>
                 <td
                   className={`px-2 py-1 border ${
-                    (item.TotalPutOI / item.TotalCallOI).toFixed(2) >= 1
+                    (item.TotalCallOI / item.TotalPutOI).toFixed(2) >= 1
                       ? "bg-gradient-to-r from-green-400 to-blue-500 text-white"
                       : "bg-gradient-to-r from-red-600 to-sky-400 text-white"
                   }`}
                 >
-                  {(item.TotalPutOI / item.TotalCallOI).toFixed(2) >= 1
+                  {(item.TotalCallOI / item.TotalPutOI).toFixed(2) >= 1
                     ? "Call"
                     : "Put"}
                 </td>

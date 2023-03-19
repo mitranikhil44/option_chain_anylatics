@@ -7,13 +7,14 @@ const TotalChgChgOI = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const pcrData = props.tabelData.map((item) => {
-        let itemPCR = item.TotalPutChgOI && item.TotalCallChgOI ? item.TotalPutChgOI / item.TotalCallChgOI : 0;
+        let itemPCR = item.TotalPutChgOI && item.TotalCallChgOI ? item.TotalCallChgOI / item.TotalPutChgOI : 0;
         itemPCR = isNaN(itemPCR) ? 0 : itemPCR;
         return itemPCR;
       });
       setPCR(pcrData);
     }
     fetchData();
+    // eslint-disable-next-line
   }, [])
   
   const chartData = {
@@ -56,16 +57,16 @@ const TotalChgChgOI = (props) => {
                   {item.TotalCallChgOI - item.TotalPutChgOI}
                 </td>
                 <td className="px-2 py-1 border">
-                  {(item.TotalPutChgOI / item.TotalCallChgOI).toFixed(2)}
+                  {(item.TotalCallChgOI /item.TotalPutChgOI).toFixed(2)}
                 </td>
                 <td
                   className={`px-2 py-1 border ${
-                    (item.TotalPutChgOI / item.TotalCallChgOI).toFixed(2) >= 1
+                    (item.TotalCallChgOI /item.TotalPutChgOI).toFixed(2) >= 1
                       ? "bg-gradient-to-r from-green-400 to-blue-500 text-white"
                       : "bg-gradient-to-r from-red-600 to-sky-400 text-white"
                   }`}
                 >
-                  {(item.TotalPutChgOI / item.TotalCallChgOI).toFixed(2) >= 1
+                  {(item.TotalCallChgOI /item.TotalPutChgOI).toFixed(2) >= 1
                     ? "Call"
                     : "Put"}
                 </td>

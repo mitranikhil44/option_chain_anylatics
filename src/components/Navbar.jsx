@@ -1,27 +1,42 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+// Navigation component
 const Navbar = () => {
-  const navLinkRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
+// Define state variables
+const navLinkRef = useRef(null); // Reference to navigation links
+const [isOpen, setIsOpen] = useState(false); // Toggle for menu
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+// Toggle menu
+const toggleMenu = () => {
+  setIsOpen(!isOpen);
+};
 
-  const toggleNavbar = () => {
-    navLinkRef.current.classList.remove("hidden");
+// Toggle navbar
+const toggleNavbar = () => {
+  navLinkRef.current.classList.remove("hidden");
+  navLinkRef.current.classList.toggle("toggleNav");
+};
+
+// Get navbar object from react-router
+let navigate = useNavigate();
+
+// Handle logout
+const handleLogout = () => {
+  localStorage.removeItem("x-auth-token");
+  navigate("/login" || "/signUp");
+};
+
+// Close navbar on small screens
+const closeNavbar = () => {
+  const mediaQuery = window.matchMedia("(min-width: 640px)");
+  if (!mediaQuery.matches) {
+    navLinkRef.current.classList.add("hidden");
     navLinkRef.current.classList.toggle("toggleNav");
-  };
+  }
+};
 
-  const closeNavbar = () => {
-    const mediaQuery = window.matchMedia("(min-width: 640px)");
-    if (!mediaQuery.matches) {
-      navLinkRef.current.classList.add("hidden");
-      navLinkRef.current.classList.toggle("toggleNav");
-    }
-  };
-
+// JSX for navbar component
   return (
     <header className="sticky top-0 left-0 z-10">
       <div className="bg-gradient-to-r from-yellow-500 via-red-500 to-pink-500 py-3">
@@ -74,7 +89,7 @@ const Navbar = () => {
                     </svg>
                   </button>
                   {isOpen && (
-                    <div className="absolute z-10 top-10 left-0 space-y-2">
+                    <div className="absolute z-10 top-10 left-0 space-y-2 my-2">
                       <Link
                         to="/nifty"
                         className="block px-4 py-2 text-gray-800 rounded-lg bg-gradient-to-r from-pink-400 to-red-500 hover:bg-gradient-to-r hover:from-red-500 hover:to-pink-400"
@@ -101,6 +116,44 @@ const Navbar = () => {
                   >
                     About Us
                   </Link>
+                  {!localStorage.getItem("x-auth-token") ? (
+                    <>
+                      <Link
+                        className="py-2 px-4 ml-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg mr-4"
+                        to="/login"
+                        role="button"
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        className="py-2 px-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white rounded-lg"
+                        to="/signUp"
+                        role="button"
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  ) : (
+                    <button
+                      className="py-[.34rem] px-2 m-2 bg-gray-100 text-red-500 hover:bg-gray-200 rounded-lg focus:outline-none transition-colors duration-300"
+                      onClick={handleLogout}
+                      role="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 inline-block mr-1"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10.293 2.293a1 1 0 011.414 0l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414-1.414L16.586 11H3a1 1 0 010-2h13.586l-5.293-5.293a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Log out
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

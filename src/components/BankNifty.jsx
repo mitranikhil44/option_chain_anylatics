@@ -3,7 +3,6 @@ import TotalChgOI from "./option_analytics/TotalChgOI";
 import TotalOI from "./option_analytics/TotalOI";
 import TotalVol from "./option_analytics/TotalVol";
 import ClickableButton from "./ClickableButton";
-
 const BankNifty = (props) => {
   const [data, setData] = useState([]);
   const [bankNiftyOptionData, setBankNiftyOptionData] = useState([]);
@@ -12,27 +11,41 @@ const BankNifty = (props) => {
   const [showChangeTableOI, setShowChangeTableOI] = useState(false);
   const [showCurrentTableVol, setShowCurrentTableVol] = useState(false);
 
+  const headers = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQxMjE0MTgzODRlNjQyYjk0NjQ5YzdkIn0sImlhdCI6MTY3ODkwNjQxNn0.xxmdEHkLp-kOJZXf2YwvnlBvWTgfZOqzfN_HXwkJXUM`,
+    }};
+
   // Function to get data from API
   useEffect(() => {
-    fetch(`${props.host}bank_nifty`)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.data);
-      });
+    const fetchBankNifty = async () => {
+      await fetch(`${props.host}bank_nifty`, headers)
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data.data);
+        });
+    };
 
-    // Get bank nifty option data
-    fetch(`${props.host}bank_nifty_option_chain`)
-      .then((res) => res.json())
-      .then((data) => {
-        const dataCopy = [...data.data];
-        const middleData = dataCopy.splice(30, dataCopy.length - 60);
-        setBankNiftyOptionData(middleData);
-      });
+    const fetchBankNiftyOP = async () => {
+      // Get bank nifty option data
+      await fetch(`${props.host}bank_nifty_option_chain`, headers)
+        .then((res) => res.json())
+        .then((data) => {
+          const dataCopy = [...data.data];
+          const middleData = dataCopy.splice(25, dataCopy.length - 45);
+          setBankNiftyOptionData(middleData);
+        });
+    };
+
+    fetchBankNifty();
+    fetchBankNiftyOP();
 
     // Get bank nifty live market price
     const fetchData = async () => {
       try {
-        const res = await fetch(`${props.host}bank_nifty_market_price`);
+        const res = await fetch(`${props.host}bank_nifty_market_price`, headers);
         if (!res.ok) {
           throw new Error(
             `Failed to fetch bank nifty market price: ${res.status}`
@@ -50,6 +63,8 @@ const BankNifty = (props) => {
 
     // Stop the interval when the component unmounts to prevent memory leaks
     return () => clearInterval(fetchInterval);
+
+     // eslint-disable-next-line
   }, [props.host]);
 
   // Function to show current open interest table
@@ -225,7 +240,7 @@ const BankNifty = (props) => {
                   </tr>
                 );
               })}
-            
+
             {data &&
               data.slice(-1).map((e, i) => {
                 return (
@@ -273,15 +288,15 @@ const BankNifty = (props) => {
 
       {/* Nifty Current Open Interest Data */}
       <ClickableButton text="Current Open Interest" onClick={handleCurrentOI} />
-      {showCurrentTableOI && <TotalOI tabelData={data.data} />}
+      {showCurrentTableOI && <TotalOI tabelData={data} />}
 
       {/* Nifty Change Open Interest Data */}
       <ClickableButton text="Change Open Interest" onClick={handleChangeOI} />
-      {showChangeTableOI && <TotalChgOI tabelData={data.data} />}
+      {showChangeTableOI && <TotalChgOI tabelData={data} />}
 
       {/* Nifty Current Volume Data */}
       <ClickableButton text="Current Volume" onClick={handleCurrentVol} />
-      {showCurrentTableVol && <TotalVol tabelData={data.data} />}
+      {showCurrentTableVol && <TotalVol tabelData={data} />}
     </>
   );
 };
