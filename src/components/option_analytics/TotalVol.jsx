@@ -7,7 +7,7 @@ const TotalVol = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const pcrData = props.tabelData.map((item) => {
-        let itemPCR = item.TotalPutChgOI && item.TotalCallChgOI ?  item.TotalCallVol / item.TotalPutVol : 0;
+        let itemPCR = item.TotalPutChgOI && item.TotalCallChgOI ? item.TotalPutVol / item.TotalCallVol : 0;
         itemPCR = isNaN(itemPCR) ? 0 : itemPCR;
         return itemPCR;
       });
@@ -57,16 +57,16 @@ const TotalVol = (props) => {
                   {item.TotalCallVol - item.TotalPutVol}
                 </td>
                 <td className="px-2 py-1 border">
-                  {( item.TotalCallVol / item.TotalPutOI).toFixed(2)}
+                  {(item.TotalPutOI / item.TotalCallVol).toFixed(2)}
                 </td>
                 <td
                   className={`px-2 py-1 border ${
-                    ( item.TotalCallVol / item.TotalPutOI).toFixed(2) >= 1
+                    (item.TotalPutOI / item.TotalCallVol).toFixed(2) >= 1
                       ? "bg-gradient-to-r from-green-400 to-blue-500 text-white"
                       : "bg-gradient-to-r from-red-600 to-sky-400 text-white"
                   }`}
                 >
-                  {( item.TotalCallVol / item.TotalPutOI).toFixed(2) >= 1
+                  {(item.TotalPutOI / item.TotalCallVol).toFixed(2) >= 1
                     ? "Call"
                     : "Put"}
                 </td>
