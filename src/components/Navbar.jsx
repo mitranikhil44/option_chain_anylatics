@@ -68,8 +68,14 @@ const closeNavbar = () => {
             <div className="ml-10 flex items-center justify-center space-x-4">
               <div className="flex space-x-4">
                 <div className="relative">
+                  <Link
+                    to="/dasboard"
+                    className="text-gray-300 bg-gradient-to-r rounded-lg from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-[0.60rem] text-sm font-medium focus:outline-none"
+                  >
+                    Dasboard
+                  </Link>
                   <button
-                    className={`text-gray-300 bg-gradient-to-r from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-2 mr-2 rounded-lg text-sm font-medium focus:outline-none ${
+                    className={`ml-2 text-gray-300 bg-gradient-to-r from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-2 mr-2 rounded-lg text-sm font-medium focus:outline-none ${
                       isOpen ? "rotate-180" : ""
                     }`}
                     onClick={toggleMenu}
@@ -110,16 +116,10 @@ const closeNavbar = () => {
                       </Link>
                     </div>
                   )}
-                  <Link
-                    to="/about"
-                    className="text-gray-300 bg-gradient-to-r rounded-lg from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-[0.60rem] text-sm font-medium focus:outline-none"
-                  >
-                    About Us
-                  </Link>
                   {!localStorage.getItem("x-auth-token") ? (
                     <>
                       <Link
-                        className="py-2 px-4 ml-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg mr-4"
+                        className="py-2 px-4 ml-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg mr-2"
                         to="/login"
                         role="button"
                       >
@@ -135,7 +135,7 @@ const closeNavbar = () => {
                     </>
                   ) : (
                     <button
-                      className="py-[.34rem] px-2 m-2 bg-gray-100 text-red-500 hover:bg-gray-200 rounded-lg focus:outline-none transition-colors duration-300"
+                      className="py-[.34rem] px-2 mr-2 bg-gray-100 text-red-500 hover:bg-gray-200 rounded-lg focus:outline-none transition-colors duration-300"
                       onClick={handleLogout}
                       role="button"
                     >

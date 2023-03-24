@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TotalChgOI from "./option_analytics/TotalChgOI";
 import TotalOI from "./option_analytics/TotalOI";
+import { useNavigate } from "react-router-dom";
 import TotalVol from "./option_analytics/TotalVol";
 import ClickableButton from "./ClickableButton";
 
@@ -11,13 +12,15 @@ const Nifty = (props) => {
   const [showCurrentTableOI, setShowCurrentTableOI] = useState(false);
   const [showChangeTableOI, setShowChangeTableOI] = useState(false);
   const [showCurrentTableVol, setShowCurrentTableVol] = useState(false);
+  const navigate = useNavigate();
 
   const headers = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-auth-token": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQxMjE0MTgzODRlNjQyYjk0NjQ5YzdkIn0sImlhdCI6MTY3ODkwNjQxNn0.xxmdEHkLp-kOJZXf2YwvnlBvWTgfZOqzfN_HXwkJXUM`,
-    }};
+      "x-auth-token": localStorage.getItem("x-auth-token"),
+    },
+  };
 
   // Function to get data from API
   useEffect(() => {
@@ -33,7 +36,7 @@ const Nifty = (props) => {
       .then((res) => res.json())
       .then((data) => {
         const dataCopy = [...data.data];
-        const middleData = dataCopy.splice(20, dataCopy.length - 40);
+        const middleData = dataCopy.splice(10, dataCopy.length - 40);
         setNiftyOptionData(middleData);
       });
 
@@ -54,12 +57,21 @@ const Nifty = (props) => {
     fetchData();
     const fetchInterval = setInterval(fetchData, 1 * 60 * 1000);
 
+    // If user is not authenticated, redirect to login page
+    if (localStorage.getItem("x-auth-token")) {
+      setTimeout(() => {
+        navigate("/dasboard");
+      }, 1000);
+    } else {
+      navigate("/login");
+    }
+
     // Stop the interval when the component unmounts to prevent memory leaks
     return () => clearInterval(fetchInterval);
 
     // eslint-disable-next-line
   }, [props.host]);
-  
+
   // Function to show current open interest table
   const handleCurrentOI = () => {
     setShowCurrentTableOI(!showCurrentTableOI);
@@ -161,19 +173,20 @@ const Nifty = (props) => {
               niftyOptionData.map((item, index) => {
                 const liveMarketPrice =
                   niftyLiveMarketPrice[niftyLiveMarketPrice.length - 1].price;
-                const lastTwoDigits = liveMarketPrice % 100;
-                const startThreeDigits = Math.floor(liveMarketPrice / 100);
+                const lastTwoDigits = Math.round(liveMarketPrice % 100);
+                const startThreeDigits = String(liveMarketPrice).substring(
+                  0,
+                  3
+                );
                 const priceValue =
-                  lastTwoDigits >= 75 || lastTwoDigits < 25 ? "50" : "00";
+                  lastTwoDigits >= 75 || lastTwoDigits <= 25 ? "50" : "00";
                 const strikePrice = parseFloat(
                   item.StrikePrice.replace(/,/g, "")
                 );
-
                 const strikePriceClass =
                   strikePrice === parseFloat(startThreeDigits + priceValue)
                     ? "border-b-8"
                     : "";
-
                 const callVolClass = check_condition(item.CallVol, 2);
                 const callOIClass = check_condition(item.CallOI, 3);
                 const callChgOIClass = check_condition(item.CallChgOI, 4);

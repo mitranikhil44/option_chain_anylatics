@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 // This component is responsible for rendering a sign up form
@@ -10,6 +10,20 @@ const Sign_up = (props) => {
     password: "",
     confirmPassword: "",
   });
+
+    // Check if user is already logged in
+    useEffect(() => {
+      if (localStorage.getItem("x-auth-token")) {
+        // If user is logged in, redirect to home page after a delay of 1 second
+        setTimeout(() => {
+          navigate("/dasboard");
+        }, 1000);
+      } else {
+        // If user is not logged in, navigate to login or signup page
+        navigate("/signUp");
+      }
+      // eslint-disable-next-line
+    }, []);
 
   // Get the navigate function from the React Router hook
   let navigate = useNavigate();
@@ -46,7 +60,7 @@ const Sign_up = (props) => {
           confirmPassword: "",
         });
         setTimeout(() => {
-          navigate("/");
+          navigate("/dasboard");
         }, 1000);
       } else {
         // If there was an error with registration, display an error message

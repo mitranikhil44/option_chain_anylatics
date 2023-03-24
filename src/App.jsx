@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState } from "react";
-import Home from "./components/Home";
+import Dasboard from "./components/Dasboard";
 import Nifty from "./components/Nifty";
 import About from "./components/About";
 import Alert from "./components/Alert";
@@ -35,11 +35,11 @@ const App = () => {
     <>
       <DataContex host={host}>
         <Router>
-          <Navbar />
+         {localStorage.getItem("x-auth-token")? <Navbar /> : ""}
           <Alert alert={alert} />
           <Routes>
-            <Route exact path="/" element={<Home host={host} />} />
-            <Route exact path="/about" element={<About />} />
+            <Route exact path="/dasboard" element={<Dasboard host={host} />} />
+            <Route exact path="/" element={<About />} />
             <Route exact path="/nifty" element={<Nifty host={host} />} />
             <Route
               exact

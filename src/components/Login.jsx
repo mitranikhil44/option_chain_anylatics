@@ -13,11 +13,11 @@ const Login = (props) => {
     if (localStorage.getItem("x-auth-token")) {
       // If user is logged in, redirect to home page after a delay of 1 second
       setTimeout(() => {
-        navigate("/");
+        navigate("/dasboard");
       }, 1000);
     } else {
       // If user is not logged in, navigate to login or signup page
-      navigate("/login" || "/signUp");
+      navigate("/login");
     }
     // eslint-disable-next-line
   }, []);
@@ -53,7 +53,7 @@ const Login = (props) => {
 
       // Redirect to home page after a delay of 1 second
       setTimeout(() => {
-        navigate("/");
+        navigate("/dasboard");
       }, 1000);
     } else {
       // If login fails, show error alert

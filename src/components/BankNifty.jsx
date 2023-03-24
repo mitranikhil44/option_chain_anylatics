@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import TotalChgOI from "./option_analytics/TotalChgOI";
 import TotalOI from "./option_analytics/TotalOI";
 import TotalVol from "./option_analytics/TotalVol";
+import { useNavigate } from "react-router-dom";
 import ClickableButton from "./ClickableButton";
 const BankNifty = (props) => {
   const [data, setData] = useState([]);
@@ -10,12 +11,13 @@ const BankNifty = (props) => {
   const [showCurrentTableOI, setShowCurrentTableOI] = useState(false);
   const [showChangeTableOI, setShowChangeTableOI] = useState(false);
   const [showCurrentTableVol, setShowCurrentTableVol] = useState(false);
+  const navigate = useNavigate();
 
   const headers = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-auth-token": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQxMjE0MTgzODRlNjQyYjk0NjQ5YzdkIn0sImlhdCI6MTY3ODkwNjQxNn0.xxmdEHkLp-kOJZXf2YwvnlBvWTgfZOqzfN_HXwkJXUM`,
+      "x-auth-token": localStorage.getItem("x-auth-token"),
     }};
 
   // Function to get data from API
@@ -34,7 +36,7 @@ const BankNifty = (props) => {
         .then((res) => res.json())
         .then((data) => {
           const dataCopy = [...data.data];
-          const middleData = dataCopy.splice(25, dataCopy.length - 45);
+          const middleData = dataCopy.splice(15, dataCopy.length - 45);
           setBankNiftyOptionData(middleData);
         });
     };
@@ -61,6 +63,15 @@ const BankNifty = (props) => {
     fetchData();
     const fetchInterval = setInterval(fetchData, 1 * 60 * 1000);
 
+     // If user is not authenticated, redirect to login page
+     if (localStorage.getItem("x-auth-token")) {
+      setTimeout(() => {
+        navigate("/dasboard");
+      }, 1000);
+    } else {
+      navigate("/login");
+    }
+    
     // Stop the interval when the component unmounts to prevent memory leaks
     return () => clearInterval(fetchInterval);
 
@@ -175,16 +186,13 @@ const BankNifty = (props) => {
                 const liveMarketPrice =
                   bankNiftyLiveMarketPrice[bankNiftyLiveMarketPrice.length - 1]
                     .price;
-                const lastTwoDigits = liveMarketPrice % 100;
-                const startThreeDigits = Math.floor(liveMarketPrice / 100);
-                const priceValue =
-                  lastTwoDigits >= 75 || lastTwoDigits < 25 ? "50" : "00";
+                    const startThreeDigits = String(liveMarketPrice).substring(0, 3);
                 const strikePrice = parseFloat(
                   item.StrikePrice.replace(/,/g, "")
                 );
 
                 const strikePriceClass =
-                  strikePrice === parseFloat(startThreeDigits + priceValue)
+                  strikePrice === parseFloat(startThreeDigits + "00")
                     ? "border-b-8"
                     : "";
 
@@ -212,7 +220,7 @@ const BankNifty = (props) => {
                       {item.CallChgOI}
                     </td>
                     {strikePrice ===
-                    parseFloat(startThreeDigits + priceValue) ? (
+                    parseFloat(startThreeDigits + "00") ? (
                       <td className="py-1 px-3 border relative">
                         <span className="font-bold">
                           {item.StrikePrice}

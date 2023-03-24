@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import TotalChgOI from "./option_analytics/TotalChgOI";
 import TotalOI from "./option_analytics/TotalOI";
 import TotalVol from "./option_analytics/TotalVol";
+import { useNavigate } from "react-router-dom";
 import ClickableButton from "./ClickableButton";
 
 const FinNifty = (props) => {
@@ -11,13 +12,15 @@ const FinNifty = (props) => {
   const [showCurrentTableOI, setShowCurrentTableOI] = useState(false);
   const [showChangeTableOI, setShowChangeTableOI] = useState(false);
   const [showCurrentTableVol, setShowCurrentTableVol] = useState(false);
+  const navigate = useNavigate();
 
   const headers = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-auth-token": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQxMjE0MTgzODRlNjQyYjk0NjQ5YzdkIn0sImlhdCI6MTY3ODkwNjQxNn0.xxmdEHkLp-kOJZXf2YwvnlBvWTgfZOqzfN_HXwkJXUM`,
-    }};
+      "x-auth-token": localStorage.getItem("x-auth-token"),
+    },
+  };
 
   // Function to get data from API
   useEffect(() => {
@@ -53,6 +56,15 @@ const FinNifty = (props) => {
     };
     fetchData();
     const fetchInterval = setInterval(fetchData, 1 * 60 * 1000);
+
+    // If user is not authenticated, redirect to login page
+    if (localStorage.getItem("x-auth-token")) {
+      setTimeout(() => {
+        navigate("/dasboard");
+      }, 1000);
+    } else {
+      navigate("/login");
+    }
 
     // Stop the interval when the component unmounts to prevent memory leaks
     return () => clearInterval(fetchInterval);
@@ -168,10 +180,13 @@ const FinNifty = (props) => {
                 const liveMarketPrice =
                   finNiftyLiveMarketPrice[finNiftyLiveMarketPrice.length - 1]
                     .price;
-                const lastTwoDigits = liveMarketPrice % 100;
-                const startThreeDigits = Math.floor(liveMarketPrice / 100);
+                const lastTwoDigits = Math.round(liveMarketPrice % 100);
+                const startThreeDigits = String(liveMarketPrice).substring(
+                  0,
+                  3
+                );
                 const priceValue =
-                  lastTwoDigits >= 75 || lastTwoDigits < 25 ? "50" : "00";
+                  lastTwoDigits >= 75 || lastTwoDigits <= 25 ? "50" : "00";
                 const strikePrice = parseFloat(
                   item.StrikePrice.replace(/,/g, "")
                 );
