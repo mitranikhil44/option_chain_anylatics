@@ -4,6 +4,8 @@ import TotalOI from "./option_analytics/TotalOI";
 import TotalVol from "./option_analytics/TotalVol";
 import { useNavigate } from "react-router-dom";
 import ClickableButton from "./ClickableButton";
+import { Option_Data } from "./Option_Data";
+import { Option_Chain_Chart_Data } from "./Option_Chain_Chart_Data";
 
 const FinNifty = (props) => {
   const [data, setData] = useState([]);
@@ -36,7 +38,7 @@ const FinNifty = (props) => {
       .then((res) => res.json())
       .then((data) => {
         const dataCopy = [...data.data];
-        const middleData = dataCopy.splice(10, dataCopy.length - 30);
+        const middleData = dataCopy.splice(20, dataCopy.length - 55);
         setFinNiftyOptionData(middleData);
       });
 
@@ -60,7 +62,7 @@ const FinNifty = (props) => {
     // If user is not authenticated, redirect to login page
     if (localStorage.getItem("x-auth-token")) {
       setTimeout(() => {
-        navigate("/dasboard");
+        navigate("/fin_nifty");
       }, 1000);
     } else {
       navigate("/login");
@@ -156,6 +158,9 @@ const FinNifty = (props) => {
         )}
       </div>
 
+      {/* Show fin nifty change OI option data */}
+      <Option_Chain_Chart_Data optionData={finNiftyOptionData} />
+
       {/* Show fin nifty option chain data */}
       <div className="mx-auto w-full text-xs overflow-auto xs:text-sm sm:text-base">
         <table className="w-full text-left table-collapse">
@@ -166,7 +171,7 @@ const FinNifty = (props) => {
               <th className="py-1 px-3">CallVol</th>
               <th className="py-1 px-3">CallOI</th>
               <th className="py-1 px-3">CallChgOI</th>
-              <th className="py-1 px-3">strikePrice</th>
+              <th className="py-1 px-3">StrikePrice</th>
               <th className="py-1 px-3">PutChgOI</th>
               <th className="py-1 px-3">PutOI</th>
               <th className="py-1 px-3">PutVol</th>
@@ -175,120 +180,12 @@ const FinNifty = (props) => {
             </tr>
           </thead>
           <tbody>
-            {finNiftyOptionData &&
-              finNiftyOptionData.map((item, index) => {
-                const liveMarketPrice =
-                  finNiftyLiveMarketPrice[finNiftyLiveMarketPrice.length - 1]
-                    .price;
-                const lastTwoDigits = Math.round(liveMarketPrice % 100);
-                const startThreeDigits = String(liveMarketPrice).substring(
-                  0,
-                  3
-                );
-                const priceValue =
-                  lastTwoDigits >= 75 || lastTwoDigits <= 25 ? "50" : "00";
-                const strikePrice = parseFloat(
-                  item.StrikePrice.replace(/,/g, "")
-                );
-
-                const strikePriceClass =
-                  strikePrice === parseFloat(startThreeDigits + priceValue)
-                    ? "border-b-8"
-                    : "";
-
-                const callVolClass = check_condition(item.CallVol, 2);
-                const callOIClass = check_condition(item.CallOI, 3);
-                const callChgOIClass = check_condition(item.CallChgOI, 4);
-                const putChgOIClass = check_condition(item.PutChgOI, 6);
-                const putOIClass = check_condition(item.PutOI, 7);
-                const putVolClass = check_condition(item.PutVol, 8);
-
-                return (
-                  <tr
-                    key={index}
-                    className={`hover:bg-gray-700 bg-gradient-to-r from-sky-400 to-indigo-600 ${strikePriceClass}`}
-                  >
-                    <td className="py-1 px-3 border">{item.CallLTP}</td>
-                    <td className="py-1 px-3 border">{item.CallChgLTP}</td>
-                    <td className={`py-1 px-3 border ${callVolClass}`}>
-                      {item.CallVol}
-                    </td>
-                    <td className={`py-1 px-3 border ${callOIClass}`}>
-                      {item.CallOI}
-                    </td>
-                    <td className={`py-1 px-3 border ${callChgOIClass}`}>
-                      {item.CallChgOI}
-                    </td>
-                    {strikePrice ===
-                    parseFloat(startThreeDigits + priceValue) ? (
-                      <td className="py-1 px-3 border relative">
-                        <span className="font-bold">
-                          {item.StrikePrice}
-                          <div className="text-xs left-[12%] top-[81.25%] xs:text-sm xs:left-[11%] xs:top-[80.25%] sm:text-base sm:left-[11%] sm:top-[76.25%] lg:left-[12%] xl:left-[15%] 2xl:left-[25%] 3xl absolute  text-gray-600">
-                            <span className="bg-gray-200 rounded-full py-0.5 px-2">
-                              {liveMarketPrice}
-                            </span>
-                          </div>
-                        </span>
-                      </td>
-                    ) : (
-                      <td className="py-1 px-3 border">{item.StrikePrice}</td>
-                    )}
-                    <td className={`py-1 px-3 border ${putChgOIClass}`}>
-                      {item.PutChgOI}
-                    </td>
-                    <td className={`py-1 px-3 border ${putOIClass}`}>
-                      {item.PutOI}
-                    </td>
-                    <td className={`py-1 px-3 border ${putVolClass}`}>
-                      {item.PutVol}
-                    </td>
-                    <td className="py-1 px-3 border">{item.PutLTP}</td>
-                    <td className="py-1 px-3 border">{item.PutChgLTP}</td>
-                  </tr>
-                );
-              })}
-            {data &&
-              data.slice(-1).map((e, i) => {
-                return (
-                  <tr
-                    key={i}
-                    className="text-center hover:bg-gray-700 bg-gradient-to-r from-red-600 to-green-600 text-white"
-                  >
-                    <td className="py-1 px-3 border">
-                      {e.TotalCallLTP.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalCallChgLTP.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalCallVol.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalCallOI.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalCallChgOI.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">Total</td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalPutChgOI.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalPutOI.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalPutVol.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalPutChgLTP.toFixed(2)}
-                    </td>
-                    <td className="py-1 px-3 border">
-                      {e.TotalPutLTP.toFixed(2)}
-                    </td>
-                  </tr>
-                );
-              })}
+            <Option_Data
+              optionData={finNiftyOptionData}
+              liveMarketPrice={finNiftyLiveMarketPrice}
+              data={data}
+              checkCondition={check_condition}
+            />
           </tbody>
         </table>
       </div>

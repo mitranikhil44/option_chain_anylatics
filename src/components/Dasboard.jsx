@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
-import { Chart, LinearScale, CategoryScale } from "chart.js";
 import { useNavigate } from "react-router-dom";
+import { Chart, LinearScale, CategoryScale } from "chart.js";
+import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 Chart.register(LinearScale);
 Chart.register(CategoryScale);
@@ -93,6 +93,7 @@ const Home = (props) => {
   return (
     <>
       {/* Nifty 50 chart and price */}
+      <h1 className="flex justify-center items-center text-3xl bg-yellow-800 p-8">Price Action</h1>
       <div>
         <div className="bg-gradient-to-r from-slate-400 via-white to-slate-500 text-black p-2 flex items-center my-4">
           <h2 className="text-lg font-medium">Market Price: </h2>

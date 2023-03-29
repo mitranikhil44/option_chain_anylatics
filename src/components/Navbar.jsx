@@ -3,40 +3,40 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Navigation component
 const Navbar = () => {
-// Define state variables
-const navLinkRef = useRef(null); // Reference to navigation links
-const [isOpen, setIsOpen] = useState(false); // Toggle for menu
+  // Define state variables
+  const navLinkRef = useRef(null); // Reference to navigation links
+  const [isOpen, setIsOpen] = useState(false); // Toggle for menu
 
-// Toggle menu
-const toggleMenu = () => {
-  setIsOpen(!isOpen);
-};
+  // Toggle menu
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
-// Toggle navbar
-const toggleNavbar = () => {
-  navLinkRef.current.classList.remove("hidden");
-  navLinkRef.current.classList.toggle("toggleNav");
-};
-
-// Get navbar object from react-router
-let navigate = useNavigate();
-
-// Handle logout
-const handleLogout = () => {
-  localStorage.removeItem("x-auth-token");
-  navigate("/login" || "/signUp");
-};
-
-// Close navbar on small screens
-const closeNavbar = () => {
-  const mediaQuery = window.matchMedia("(min-width: 640px)");
-  if (!mediaQuery.matches) {
-    navLinkRef.current.classList.add("hidden");
+  // Toggle navbar
+  const toggleNavbar = () => {
+    navLinkRef.current.classList.remove("hidden");
     navLinkRef.current.classList.toggle("toggleNav");
-  }
-};
+  };
 
-// JSX for navbar component
+  // Get navbar object from react-router
+  let navigate = useNavigate();
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("x-auth-token");
+    navigate("/login" || "/signUp");
+  };
+
+  // Close navbar on small screens
+  const closeNavbar = () => {
+    const mediaQuery = window.matchMedia("(min-width: 640px)");
+    if (!mediaQuery.matches) {
+      navLinkRef.current.classList.add("hidden");
+      navLinkRef.current.classList.toggle("toggleNav");
+    }
+  };
+
+  // JSX for navbar component
   return (
     <header className="sticky top-0 left-0 z-10">
       <div className="bg-gradient-to-r from-yellow-500 via-red-500 to-pink-500 py-3">
@@ -67,15 +67,15 @@ const closeNavbar = () => {
           >
             <div className="ml-10 flex items-center justify-center space-x-4">
               <div className="flex space-x-4">
+                <Link
+                  to="/dasboard"
+                  className="text-gray-300 bg-gradient-to-r rounded-lg from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-2 py-[0.60rem] text-sm font-medium focus:outline-none"
+                >
+                  Dasboard
+                </Link>
                 <div className="relative">
-                  <Link
-                    to="/dasboard"
-                    className="text-gray-300 bg-gradient-to-r rounded-lg from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-[0.60rem] text-sm font-medium focus:outline-none"
-                  >
-                    Dasboard
-                  </Link>
                   <button
-                    className={`ml-2 text-gray-300 bg-gradient-to-r from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-2 mr-2 rounded-lg text-sm font-medium focus:outline-none ${
+                    className={`relative ml-2 text-gray-300 bg-gradient-to-r from-indigo-400 to-sky-500 hover:bg-gradient-to-r hover:from-sky-500 hover:to-indigo-400 px-3 py-[.6rem] mr-2 rounded-lg text-sm font-medium focus:outline-none ${
                       isOpen ? "rotate-180" : ""
                     }`}
                     onClick={toggleMenu}
@@ -116,45 +116,45 @@ const closeNavbar = () => {
                       </Link>
                     </div>
                   )}
-                  {!localStorage.getItem("x-auth-token") ? (
-                    <>
-                      <Link
-                        className="py-2 px-4 ml-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg mr-2"
-                        to="/login"
-                        role="button"
-                      >
-                        Login
-                      </Link>
-                      <Link
-                        className="py-2 px-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white rounded-lg"
-                        to="/signUp"
-                        role="button"
-                      >
-                        Sign Up
-                      </Link>
-                    </>
-                  ) : (
-                    <button
-                      className="py-[.34rem] px-2 mr-2 bg-gray-100 text-red-500 hover:bg-gray-200 rounded-lg focus:outline-none transition-colors duration-300"
-                      onClick={handleLogout}
+                </div>
+                {!localStorage.getItem("x-auth-token") ? (
+                  <>
+                    <Link
+                      className="py-2 px-4 ml-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg mr-2"
+                      to="/login"
                       role="button"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 inline-block mr-1"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10.293 2.293a1 1 0 011.414 0l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414-1.414L16.586 11H3a1 1 0 010-2h13.586l-5.293-5.293a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      Log out
-                    </button>
-                  )}
-                </div>
+                      Login
+                    </Link>
+                    <Link
+                      className="py-2 px-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white rounded-lg"
+                      to="/signUp"
+                      role="button"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                ) : (
+                  <button
+                    className="py-[.34rem] px-2 mr-2 bg-gray-100 text-red-500 hover:bg-gray-200 rounded-lg focus:outline-none transition-colors duration-300"
+                    onClick={handleLogout}
+                    role="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 inline-block mr-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.293 2.293a1 1 0 011.414 0l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414-1.414L16.586 11H3a1 1 0 010-2h13.586l-5.293-5.293a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Log out
+                  </button>
+                )}
               </div>
             </div>
           </nav>
