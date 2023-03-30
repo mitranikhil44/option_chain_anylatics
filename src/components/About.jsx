@@ -34,22 +34,26 @@ const About = () => {
           to everyone. Join our community today and start making smarter
           investment decisions.
         </p>
-        <div className="mt-12 flex justify-center">
-          <Link
-            className="py-2 px-4 ml-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg mr-2"
-            to="/login"
-            role="button"
-          >
-            Login Now
-          </Link>
-          <Link
-            className="py-2 px-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white rounded-lg"
-            to="/signUp"
-            role="button"
-          >
-            Sign Up Now
-          </Link>
-        </div>
+        {!localStorage.getItem("x-auth-token") ? (
+          <div className="mt-12 flex justify-center">
+            <Link
+              className="py-2 px-4 ml-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg mr-2"
+              to="/login"
+              role="button"
+            >
+              Login Now
+            </Link>
+            <Link
+              className="py-2 px-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white rounded-lg"
+              to="/signUp"
+              role="button"
+            >
+              Sign Up Now
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

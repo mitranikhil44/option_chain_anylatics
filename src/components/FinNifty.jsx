@@ -38,7 +38,7 @@ const FinNifty = (props) => {
       .then((res) => res.json())
       .then((data) => {
         const dataCopy = [...data.data];
-        const middleData = dataCopy.splice(20, dataCopy.length - 55);
+        const middleData = dataCopy.splice(20, dataCopy.length - 40);
         setFinNiftyOptionData(middleData);
       });
 
