@@ -5,7 +5,7 @@ const About = () => {
   return (
     <>
       <div className="bg-gradient-to-r from-purple-200 to-indigo-400 text-black p-10 rounded-lg shadow-lg">
-        <h1 className="text-4xl font-bold mb-6 text-center">Option Master</h1>
+        <h1 className="text-4xl font-bold mb-6 text-center">Option Chain Analytics</h1>
         <p className="text-lg mb-6 text-center leading-7">
           Option Chain Analytics is a data-driven platform dedicated to
           providing real-time data for the Indian stock market. Our mission is
