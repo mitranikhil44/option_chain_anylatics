@@ -37,9 +37,7 @@ const FinNifty = (props) => {
     fetch(`${props.host}fin_nifty_option_chain`, headers)
       .then((res) => res.json())
       .then((data) => {
-        const dataCopy = [...data.data];
-        const middleData = dataCopy.splice(20, dataCopy.length - 40);
-        setFinNiftyOptionData(middleData);
+        setFinNiftyOptionData(data.data);
       });
 
     // Get fin nifty live market price
@@ -159,7 +157,9 @@ const FinNifty = (props) => {
       </div>
 
       {/* Show fin nifty change OI option data */}
-      <Option_Chain_Chart_Data optionData={finNiftyOptionData} />
+      <div className="overflow-x-auto my-3">
+        <Option_Chain_Chart_Data optionData={finNiftyOptionData} />
+      </div>
 
       {/* Show fin nifty option chain data */}
       <div className="mx-auto w-full text-xs overflow-auto xs:text-sm sm:text-base">

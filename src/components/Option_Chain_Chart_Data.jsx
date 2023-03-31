@@ -36,7 +36,7 @@ export const Option_Chain_Chart_Data = (props) => {
   return (
     <>
       {/* Live Nifty 50 Price */}
-      <div className="w-full mx-auto my-4 lg:my-8">
+      <div className="w-[500%] xs:w-[400%] sm:w-[300%] lg:w-[200%] 2xl:w-[100%] mx-auto my-4 lg:my-8">
         <Bar
           key="nifty-option-chart"
           data={chartData}
