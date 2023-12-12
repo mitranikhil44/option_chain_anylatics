@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Option_Data = (props) => {
+export const OptionData = (props) => {
   return (
     <>
       {props.optionData &&

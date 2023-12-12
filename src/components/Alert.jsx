@@ -4,7 +4,8 @@ import React from "react";
 function Alert(props) {
 // Return a div element containing the alert message
   return (
-    <div className="h-16 m-1 my-1">
+    <div className="m-1 my-1">
+      
       {/* If the "alert" prop is truthy, render the alert message */}
       {props.alert && (
         <div

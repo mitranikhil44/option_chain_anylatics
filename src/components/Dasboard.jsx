@@ -94,7 +94,7 @@ const Home = (props) => {
     <>
       {/* Nifty 50 chart and price */}
       <h1 className="flex justify-center items-center text-3xl bg-yellow-800 p-8">Price Action</h1>
-      <div>
+      <div className="w-[220%] xs:w-[150%] sm:w-[130%] lg:w-[100%] mx-auto my-4 lg:my-8">
         <div className="bg-gradient-to-r from-slate-400 via-white to-slate-500 text-black p-2 flex items-center my-4">
           <h2 className="text-lg font-medium">Market Price: </h2>
           {niftyLiveMarketPrice.length > 0 && (
@@ -138,7 +138,7 @@ const Home = (props) => {
       </div>
 
       {/* Bank Nifty chart and price */}
-      <div>
+      <div className="w-[220%] xs:w-[150%] sm:w-[130%] lg:w-[100%] mx-auto my-4 lg:my-8">
         <div className="bg-gradient-to-r from-slate-400 via-white to-slate-500 text-black p-2 flex items-center my-4">
           <h2 className="text-lg font-medium">Market Price: </h2>
           {bankNiftyLiveMarketPrice.length > 0 && (
@@ -187,7 +187,7 @@ const Home = (props) => {
       </div>
 
       {/* Fin Nifty chart and price */}
-      <div>
+      <div className="w-[220%] xs:w-[150%] sm:w-[130%] lg:w-[100%] mx-auto my-4 lg:my-8">
         <div className="bg-gradient-to-r from-slate-400 via-white to-slate-500 text-black p-2 flex items-center my-4">
           <h2 className="text-lg font-medium">Market Price: </h2>
           {finNiftyLiveMarketPrice.length > 0 && (

@@ -4,8 +4,8 @@ import TotalOI from "./option_analytics/TotalOI";
 import TotalVol from "./option_analytics/TotalVol";
 import { useNavigate } from "react-router-dom";
 import ClickableButton from "./ClickableButton";
-import { Option_Data } from "./Option_Data";
-import { Option_Chain_Chart_Data } from "./Option_Chain_Chart_Data";
+import { OptionData } from "./Option_Data";
+import { OptionChainChartData } from "./Option_Chain_Chart_Data";
 
 const FinNifty = (props) => {
   const [data, setData] = useState([]);
@@ -158,7 +158,7 @@ const FinNifty = (props) => {
 
       {/* Show fin nifty change OI option data */}
       <div className="overflow-x-auto my-3">
-        <Option_Chain_Chart_Data optionData={finNiftyOptionData} />
+        <OptionChainChartData optionData={finNiftyOptionData} />
       </div>
 
       {/* Show fin nifty option chain data */}
@@ -180,7 +180,7 @@ const FinNifty = (props) => {
             </tr>
           </thead>
           <tbody>
-            <Option_Data
+            <OptionData
               optionData={finNiftyOptionData}
               liveMarketPrice={finNiftyLiveMarketPrice}
               data={data}
