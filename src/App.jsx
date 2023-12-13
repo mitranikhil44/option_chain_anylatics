@@ -14,7 +14,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   // Set the URL for the API
-  const host = `https://scalping-option-chain-backend.vercel.app/`;
+  const host = `https://prickly-eel-waistcoat.cyclic.app/`;
 
   // Create state for alert
   const [alert, setAlert] = useState(null);
